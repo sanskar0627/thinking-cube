@@ -328,16 +328,35 @@ type Tune = {
   line: number;
   /** ink for hidden edges, relative to front */
   hidden: number;
+  /** detail multiplier for large sizes (1 up to 72px) */
+  res: number;
 };
 
 function resolveTune(size: number): Tune {
   const t = clamp01((size - 20) / 44);
+  // Large sizes gain detail instead of just bigger dots: above 72px the
+  // "detail" dots (lattice, edge rhythm, lanes) grow in number and shrink by
+  // the same factor, so spacing matches the 64px design at a higher
+  // resolution. Feature dots (corners, heads, packets) keep their size.
+  // Everything at or below 72px is untouched.
+  const k = size / 64;
+  const res = lerp(1, Math.sqrt(Math.max(1, k)), clamp01((size - 72) / 88));
   return {
-    n: lerp(0.4, 1, t),
-    dot: lerp(0.62, 1.05, t) * (size > 64 ? size / 64 : 1),
-    line: lerp(0.7, 1.0, t) * (size > 64 ? Math.sqrt(size / 64) : 1),
+    n: lerp(0.4, 1, t) * res,
+    dot: lerp(0.62, 1.05, t) * (size > 64 ? k : 1),
+    line: lerp(0.7, 1.0, t) * (size > 64 ? Math.sqrt(k) : 1),
     hidden: lerp(0.18, 0.3, t),
+    res,
   };
+}
+
+/** Dots per face edge for the dot-built cube, scaled for large sizes. */
+function latticeSize(tune: Tune, rubik = false) {
+  const base = 3 + 4 * Math.sqrt(tune.n / tune.res);
+  let g = Math.max(4, Math.round(base * tune.res));
+  // keep whole dots per Rubik slab (4 slabs per axis) when upscaled
+  if (rubik && tune.res > 1) g = Math.max(7, Math.round((g + 1) / 4) * 4 - 1);
+  return g;
 }
 
 function clamp01(n: number) {
@@ -370,7 +389,8 @@ class Sink {
     readonly tune: Tune,
   ) {}
 
-  dot(x: number, y: number, z: number, r: number, a: number) {
+  /** `fine` marks detail dots, which get smaller (and more numerous) at large sizes. */
+  dot(x: number, y: number, z: number, r: number, a: number, fine = false) {
     if (a < 0.015) return;
     const p = this.view.p(x, y, z);
     const k = near(p.z);
@@ -378,7 +398,7 @@ class Sink {
       x: p.x,
       y: p.y,
       z: p.z,
-      r: r * this.tune.dot * (0.78 + 0.32 * k),
+      r: r * this.tune.dot * (fine ? 1 / this.tune.res : 1) * (0.78 + 0.32 * k),
       a: a * (0.5 + 0.5 * k),
     });
   }
@@ -395,7 +415,7 @@ class Sink {
     const n = Math.max(1, Math.round(count * this.tune.n));
     for (let i = 1; i < n; i++) {
       const u = i / n;
-      this.dot(lerp(a[0], b[0], u), lerp(a[1], b[1], u), lerp(a[2], b[2], u), r, alpha);
+      this.dot(lerp(a[0], b[0], u), lerp(a[1], b[1], u), lerp(a[2], b[2], u), r, alpha, true);
     }
   }
 
@@ -420,7 +440,7 @@ class Sink {
 
   /** Dot grid on one face (interior points only). */
   faceGrid(f: number, cells: number, r: number, alpha: number, fn?: (u: number, v: number) => number) {
-    const g = Math.max(2, Math.round(cells * Math.sqrt(this.tune.n)));
+    const g = Math.max(2, Math.round(cells * Math.sqrt(this.tune.n / this.tune.res) * this.tune.res));
     for (let i = 1; i < g; i++) {
       for (let j = 1; j < g; j++) {
         const u = (i / g) * 2 - 1;
@@ -428,7 +448,7 @@ class Sink {
         const k = fn ? fn(u, v) : 1;
         if (k <= 0) continue;
         const p = facePoint(f, u, v);
-        this.dot(p[0], p[1], p[2], r * (0.6 + 0.4 * k), alpha * k);
+        this.dot(p[0], p[1], p[2], r * (0.6 + 0.4 * k), alpha * k, true);
       }
     }
   }
@@ -471,7 +491,7 @@ type Draw = (size: number, t: number, tune: Tune) => Frame;
 const drawWorking: Draw = (size, t, tune) => {
   const s = new Sink(makeView(ELEV + 0.07 * Math.sin(t * 0.9), t * 1.25, size, 1), tune);
   s.frame(0.55, 4, 1, 1.3);
-  const per = Math.max(1, Math.round(3 * tune.n));
+  const per = Math.max(1, Math.round((3 * tune.n) / tune.res));
   for (let e = 0; e < EDGES.length; e++) {
     const [ia, ib] = EDGES[e];
     const a = VERTS[ia];
@@ -499,13 +519,13 @@ const drawWorking: Draw = (size, t, tune) => {
 /** A scan plane sweeps left ↔ right through the dot-built cube. */
 const drawSearching: Draw = (size, t, tune) => {
   const s = new Sink(makeView(ELEV, 0.6 + t * 0.16, size, 1), tune);
-  const g = Math.max(4, Math.round(3 + 4 * Math.sqrt(tune.n)));
+  const g = latticeSize(tune);
   const scanX = Math.sin(t * 0.85) * 0.85;
   for (const p of surfaceGrid(g)) {
     const d = p[0] - scanX;
     const boost = Math.exp(-(d * d) / 0.05);
     // un-scanned dots stay faint so the moving plane reads clearly
-    s.dot(p[0], p[1], p[2], 0.62 + 1.05 * boost, 0.3 + 0.7 * boost);
+    s.dot(p[0], p[1], p[2], 0.62 + 1.05 * boost, 0.3 + 0.7 * boost, true);
   }
   // whisper of an outline so the silhouette holds at 20 px
   const lw = 0.8;
@@ -522,12 +542,12 @@ const MOVE_COUNT = 9;
 const RUBIK_MOVES = makeMoves(MOVE_COUNT);
 const drawSolving: Draw = (size, t, tune) => {
   const s = new Sink(makeView(ELEV + 0.08 * Math.sin(t * 0.5), 0.55 + t * 0.3, size, 0.96), tune);
-  const g = Math.max(4, Math.round(3 + 4 * Math.sqrt(tune.n)));
+  const g = latticeSize(tune, true);
   const sc = solveCycle(t, MOVE_COUNT, 0.5, 1.4);
   for (const p of surfaceGrid(g)) {
     const [x, y, z, active] = applyMoves(p, RUBIK_MOVES, sc);
     // the slab being turned inks brighter and a touch bigger — the "hand"
-    s.dot(x, y, z, 0.78 + (active ? 0.5 : 0), active ? 1 : 0.62);
+    s.dot(x, y, z, 0.78 + (active ? 0.5 : 0), active ? 1 : 0.62, true);
   }
   return s.frameOut();
 };
@@ -535,13 +555,13 @@ const drawSolving: Draw = (size, t, tune) => {
 /** A waveform rolls through the dot cube's bands — waiting for input. */
 const drawListening: Draw = (size, t, tune) => {
   const s = new Sink(makeView(ELEV, 0.62 + t * 0.12, size, 1), tune);
-  const g = Math.max(4, Math.round(3 + 4 * Math.sqrt(tune.n)));
+  const g = latticeSize(tune);
   for (const p of surfaceGrid(g)) {
     // two waves, different tempi — organic, never quite repeating
     const w = 0.62 * Math.sin(t * 2.1 - p[1] * 2.4) + 0.38 * Math.sin(t * 1.27 + p[1] * 3.8);
     const k = 0.94 + 0.065 * w;
     const crest = Math.max(0, w);
-    s.dot(p[0] * k, p[1] * k, p[2] * k, 0.68 * (1 + 0.45 * crest), 0.42 + 0.5 * crest);
+    s.dot(p[0] * k, p[1] * k, p[2] * k, 0.68 * (1 + 0.45 * crest), 0.42 + 0.5 * crest, true);
   }
   return s.frameOut();
 };
@@ -733,7 +753,7 @@ const drawComposing: Draw = (size, t, tune) => {
       const pt = toSurface(Math.cos(a), y0 + wob, Math.sin(a));
       const ink = 0.85 - 0.3 * Math.abs(c);
       if (prev) s.line(prev, pt, 0.7, 0.32 * ink);
-      if (i % 2 === 0) s.dot(pt[0], pt[1], pt[2], 0.62, 0.8 * ink);
+      if (i % 2 === 0) s.dot(pt[0], pt[1], pt[2], 0.62, 0.8 * ink, true);
       prev = pt;
     }
   }
