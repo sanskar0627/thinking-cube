@@ -1,0 +1,787 @@
+/* Design tokens — mirrors the libraries.dev surface language */
+:root {
+  color-scheme: dark;
+  --bg: #121212;
+  --surface: rgba(217, 217, 217, 0.05);
+  --surface-strong: rgba(217, 217, 217, 0.08);
+  --text: #fbfbfb;
+  --text-muted: rgba(251, 251, 251, 0.6);
+  --text-faint: rgba(251, 251, 251, 0.4);
+  --code-bg: #121212;
+  --pill-bg: rgba(29, 29, 29, 0.7);
+  --pill-ring: inset 0 0 0 1px rgba(44, 47, 54, 0.52), inset 0 0 50px 0 rgba(255, 255, 255, 0.02);
+  --pill-fg: rgba(251, 251, 251, 0.55);
+  --tab-bg: rgba(255, 255, 255, 0.03);
+  --tab-color: rgba(251, 251, 251, 0.5);
+  --tab-hover-bg: rgba(255, 255, 255, 0.06);
+  --tab-active-bg: rgba(255, 255, 255, 0.08);
+  --tab-active-color: #fbfbfb;
+  --tab-active-ring: inset 0 0 0 0.5px rgba(255, 255, 255, 0.04), inset 0 0.5px 0 0 rgba(255, 255, 255, 0.08);
+  --panel-bg: #121212;
+  --track: rgba(255, 255, 255, 0.08);
+  --track-fill: rgba(255, 255, 255, 0.28);
+  --shimmer-base: rgba(251, 251, 251, 0.5);
+  --shimmer-hi: #ffffff;
+  --icon-chip-bg: rgba(255, 255, 255, 0.06);
+  --hero-surface: rgba(217, 217, 217, 0.035);
+  /* libraries.dev live example chrome (sites/home/public/assets/examples.css) */
+  --ex-cell-bg: #171717;
+  --ex-pill-bg: rgba(29, 29, 29, 0.5);
+  --ex-pill-ring: inset 0 0 0 1px rgba(44, 47, 54, 0.22);
+  --ex-pill-fg: #ededed;
+  --ex-chip-fg: #cfcfcf;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+  --font-mono: 'Geist Mono', 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    monospace;
+  --font-display: 'Instrument Serif', 'New York', ui-serif, Georgia, serif;
+  /* surfaces shared by cards (cells, stage, panel, code, props) */
+  --card-bg: var(--ex-cell-bg);
+  --card-ring: none;
+  --inset-bg: rgba(255, 255, 255, 0.04);
+  --hairline: rgba(255, 255, 255, 0.07);
+  --code-chip-bg: rgba(255, 255, 255, 0.05);
+  --code-chip-ring: rgba(255, 255, 255, 0.09);
+  --stage-bg: var(--surface);
+  /* code windows */
+  --code-win-bg: #171717;
+  --code-bar-bg: rgba(255, 255, 255, 0.025);
+  --code-ink: #e8e8ea;
+  --tok-kw: #fc5fa3;
+  --tok-str: #fc6a5d;
+  --tok-tag: #5dd8ff;
+  --tok-attr: #d0a8ff;
+  --tok-num: #d9c97c;
+  --tok-com: #6c7986;
+  --tok-punc: rgba(232, 232, 234, 0.55);
+  --tok-prompt: rgba(232, 232, 234, 0.35);
+}
+
+html[data-theme='light'] {
+  color-scheme: light;
+  /* Apple system greys: #f5f5f7 canvas, white cards, #1d1d1f ink */
+  --bg: #f5f5f7;
+  --surface: rgba(0, 0, 0, 0.035);
+  --surface-strong: rgba(0, 0, 0, 0.06);
+  --text: #1d1d1f;
+  --text-muted: #6e6e73;
+  --text-faint: #86868b;
+  --code-bg: #ffffff;
+  --pill-bg: #ffffff;
+  --pill-ring: 0 0 0 0.5px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --pill-fg: #6e6e73;
+  /* segmented-control language for tabs + chips */
+  --tab-bg: rgba(118, 118, 128, 0.1);
+  --tab-color: #6e6e73;
+  --tab-hover-bg: rgba(118, 118, 128, 0.16);
+  --tab-active-bg: #ffffff;
+  --tab-active-color: #1d1d1f;
+  --tab-active-ring: 0 0 0 0.5px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.1),
+    0 3px 8px rgba(0, 0, 0, 0.04);
+  --panel-bg: #ffffff;
+  --track: rgba(118, 118, 128, 0.12);
+  --track-fill: rgba(29, 29, 31, 0.22);
+  --shimmer-base: rgba(29, 29, 31, 0.5);
+  --shimmer-hi: #1d1d1f;
+  --icon-chip-bg: #ffffff;
+  --hero-surface: #ffffff;
+  /* example chrome: white cells, soft frosted capsules */
+  --ex-cell-bg: #ffffff;
+  --ex-pill-bg: #f5f5f7;
+  --ex-pill-ring: inset 0 0 0 0.5px rgba(0, 0, 0, 0.07), 0 1px 1px rgba(0, 0, 0, 0.02);
+  --ex-pill-fg: #1d1d1f;
+  --ex-chip-fg: #424245;
+  /* cards float on the grey canvas */
+  --card-bg: #ffffff;
+  --card-ring: 0 0 0 0.5px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04),
+    0 12px 32px -12px rgba(0, 0, 0, 0.1);
+  --inset-bg: #f5f5f7;
+  --hairline: rgba(0, 0, 0, 0.07);
+  --code-chip-bg: rgba(0, 0, 0, 0.04);
+  --code-chip-ring: rgba(0, 0, 0, 0.08);
+  --stage-bg: #ffffff;
+  /* code windows: Xcode light palette */
+  --code-win-bg: #ffffff;
+  --code-bar-bg: #fafafc;
+  --code-ink: #1d1d1f;
+  --tok-kw: #9b2393;
+  --tok-str: #c41a16;
+  --tok-tag: #0b4f79;
+  --tok-attr: #6c36a9;
+  --tok-num: #1c00cf;
+  --tok-com: #8a99a6;
+  --tok-punc: rgba(29, 29, 31, 0.5);
+  --tok-prompt: rgba(29, 29, 31, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: 0;
+  background: none;
+  padding: 0;
+}
+
+.page {
+  width: 100%;
+  /* 1080px content column + 2×24px gutter (scaled up from libraries.dev's 936) */
+  max-width: 1128px;
+  margin: 0 auto;
+  padding: 40px 24px 72px;
+}
+
+/* ---------- header ---------- */
+
+.hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.icon-chip {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: var(--icon-chip-bg);
+  box-shadow: var(--card-ring);
+  display: grid;
+  place-items: center;
+  margin-bottom: 16px;
+}
+
+h1 {
+  font-family: 'Saans', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  font-size: 36px;
+  line-height: 42px;
+  font-weight: 500;
+  letter-spacing: -0.18px;
+  margin: 0 0 12px;
+}
+
+.lede {
+  margin: 0;
+  font-size: 16px;
+  line-height: 24.2px;
+  color: var(--text-muted);
+  max-width: 620px;
+}
+
+.theme-btn {
+  flex: none;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--tab-bg);
+  color: var(--tab-color);
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.theme-btn:hover {
+  background: var(--tab-hover-bg);
+  color: var(--text);
+}
+
+/* ---------- tabs ---------- */
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin: 8px 0 12px;
+}
+
+.tab {
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  color: var(--tab-color);
+  background: transparent;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+
+.tab:hover {
+  background: var(--tab-hover-bg);
+}
+
+.tab[aria-selected='true'] {
+  background: var(--tab-active-bg);
+  color: var(--tab-active-color);
+  box-shadow: var(--tab-active-ring);
+}
+
+/* ---------- examples (orbs-style hero boxes) ---------- */
+
+.examples {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.hero-grid .hero-box {
+  height: 380px;
+  padding: 48px 40px;
+}
+
+.chip-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 184px;
+  gap: 12px;
+}
+
+.hero-box {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  background: var(--ex-cell-bg);
+  box-shadow: var(--card-ring);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  overflow: hidden;
+}
+
+.hero-box.tall {
+  grid-row: span 2;
+}
+
+/* Large capsule — libraries.dev .ex-pill, verbatim:
+   74px tall, 9px lead (orb sits snug to the rim), 32px tail, 12px gap,
+   50px radius, translucent fill with a 1px cool-grey ring drawn as an inset
+   shadow so the ring never changes the box size. Width hugs the content. */
+.pill-lg {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 14px;
+  height: 88px;
+  padding: 0 38px 0 11px;
+  border-radius: 50px;
+  background: var(--ex-pill-bg);
+  box-shadow: var(--ex-pill-ring);
+  color: var(--ex-pill-fg);
+  font-family: var(--font-sans);
+  font-size: 21px;
+  font-weight: 400;
+  line-height: 28px;
+  letter-spacing: normal;
+  white-space: nowrap;
+  cursor: default;
+}
+
+/* Compact chip — libraries.dev .ex-chip, verbatim */
+.pill-sm {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 22px 0 10px;
+  border-radius: 50px;
+  background: var(--ex-pill-bg);
+  box-shadow: var(--ex-pill-ring);
+  color: var(--ex-chip-fg);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+  white-space: nowrap;
+  cursor: default;
+}
+
+/* the orb/cube never squeezes when the label is long */
+.pill-lg canvas,
+.pill-sm canvas {
+  flex: none;
+}
+
+/* shimmer label (transitions.dev-style) */
+.shimmer {
+  position: relative;
+  display: inline-block;
+  color: var(--shimmer-base);
+}
+
+.shimmer::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 40%,
+    var(--shimmer-hi) 50%,
+    transparent 60%,
+    transparent 100%
+  );
+  background-size: 400% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0% 0;
+  }
+}
+
+/* ---------- sections ---------- */
+
+.section {
+  margin-top: 28px;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 34px;
+  color: var(--text-muted);
+  margin: 0 0 4px;
+}
+
+/* ---------- install & usage ---------- */
+
+.doc-section {
+  margin-top: 28px;
+}
+
+.doc-section + .doc-section {
+  margin-top: 48px;
+}
+
+.doc-head {
+  margin: 4px 0 16px;
+}
+
+.doc-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 40px;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+.doc-sub {
+  margin: 6px 0 0;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--text-muted);
+}
+
+.code-window {
+  border-radius: 14px;
+  background: var(--code-win-bg);
+  box-shadow: var(--card-ring);
+  overflow: hidden;
+}
+
+html:not([data-theme='light']) .code-window {
+  box-shadow: inset 0 0 0 1px var(--hairline);
+}
+
+.code-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  height: 44px;
+  padding: 0 8px 0 18px;
+  background: var(--code-bar-bg);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.code-title {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--text-muted);
+}
+
+.code-body {
+  margin: 0;
+  padding: 18px 20px 20px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 15.5px;
+  line-height: 27px;
+  color: var(--code-ink);
+  white-space: pre;
+  font-feature-settings: 'calt' 1, 'liga' 1;
+}
+
+.tok-kw { color: var(--tok-kw); }
+.tok-str { color: var(--tok-str); }
+.tok-tag { color: var(--tok-tag); }
+.tok-attr { color: var(--tok-attr); }
+.tok-num { color: var(--tok-num); }
+.tok-com { color: var(--tok-com); font-style: italic; }
+.tok-punc { color: var(--tok-punc); }
+.tok-prompt { color: var(--tok-prompt); user-select: none; }
+
+/* props — libraries.dev's own table language (how-to-use .howto-table):
+   no card, no fills, hairline rules drawn as inset shadows, muted text,
+   the prop name in a neutral code chip and the type set quietly in mono. */
+.api-wrap {
+  overflow-x: auto;
+}
+
+.api {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 15px;
+}
+
+.api th,
+.api td {
+  text-align: left;
+  vertical-align: top;
+  padding: 18px 24px 18px 0;
+  box-shadow: inset 0 -1px 0 0 var(--hairline);
+}
+
+.api th {
+  padding-top: 0;
+  padding-bottom: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.api th:first-child,
+.api td:first-child {
+  width: 150px;
+}
+
+.api th:last-child,
+.api td:last-child {
+  width: 96px;
+  padding-right: 0;
+}
+
+.api-name {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  line-height: 20px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: var(--code-chip-bg);
+  box-shadow: inset 0 0 0 1px var(--code-chip-ring);
+  color: var(--text);
+}
+
+.api-desc {
+  margin: 1px 0 0;
+  font-size: 15px;
+  line-height: 23px;
+  color: var(--text);
+}
+
+.api-inline {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: var(--code-chip-bg);
+  box-shadow: inset 0 0 0 1px var(--code-chip-ring);
+}
+
+.api-type {
+  margin: 6px 0 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 21px;
+  color: var(--text-faint);
+}
+
+.api-def {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 24px;
+  color: var(--text-muted);
+}
+
+/* ---------- playground ---------- */
+
+.playground {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 12px;
+}
+
+.stage {
+  /* fills the row so it always matches the control panel's height */
+  height: 100%;
+  min-height: 460px;
+  border-radius: 16px;
+  background: var(--stage-bg);
+  box-shadow: var(--card-ring);
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.stage-btn {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--tab-active-bg);
+  color: var(--tab-active-color);
+  box-shadow: var(--tab-active-ring);
+  font-size: 13px;
+}
+
+.panel {
+  border-radius: 16px;
+  background: var(--panel-bg);
+  box-shadow: var(--card-ring);
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.field-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  background: var(--tab-bg);
+  color: var(--tab-color);
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+
+.chip:hover {
+  background: var(--tab-hover-bg);
+}
+
+.chip[aria-pressed='true'] {
+  background: var(--tab-active-bg);
+  color: var(--tab-active-color);
+  box-shadow: var(--tab-active-ring);
+}
+
+.range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 34px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--track-fill) 0 var(--fill, 40%),
+    var(--track) var(--fill, 40%) 100%
+  );
+  outline: none;
+  margin: 0;
+}
+
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 34px;
+  height: 34px;
+  background: transparent;
+  border: 0;
+}
+
+.range::-moz-range-thumb {
+  width: 34px;
+  height: 34px;
+  background: transparent;
+  border: 0;
+}
+
+.range-wrap {
+  position: relative;
+}
+
+.range-value {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.snippet {
+  position: relative;
+  margin-top: 2px;
+  border-radius: 12px;
+  background: var(--inset-bg);
+  padding: 14px 16px;
+}
+
+.snippet pre {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--code-ink);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.snippet .copy-btn {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+
+/* copy button — shared by the snippet and the install/usage blocks */
+.copy-btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: var(--tab-bg);
+  color: var(--tab-color);
+  font-size: 12px;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+
+.copy-btn:hover {
+  background: var(--tab-hover-bg);
+  color: var(--text);
+}
+
+.copy-btn[data-copied='true'] {
+  color: var(--text);
+}
+
+.copy-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+footer {
+  margin-top: 40px;
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+footer a {
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+@media (max-width: 860px) {
+  .hero-grid,
+  .chip-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+  .hero-grid .hero-box,
+  .hero-box,
+  .hero-box.tall {
+    height: auto;
+    min-height: 200px;
+    grid-row: auto;
+    padding: 32px;
+  }
+  .playground {
+    grid-template-columns: 1fr;
+  }
+  .stage {
+    min-height: 320px;
+  }
+  .doc-title {
+    font-size: 30px;
+    line-height: 36px;
+  }
+}
+
+@media (max-width: 460px) {
+  .page {
+    padding: 28px 16px 56px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer::before {
+    animation: none;
+  }
+}
