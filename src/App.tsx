@@ -39,6 +39,7 @@ const PLAYGROUND_STATES: Array<{ state: CubeState; label: string }> = [
 ];
 
 const INSTALL = 'npm install thinking-cube';
+const INSTALL_SHORT = 'npm i thinking-cube';
 const USAGE = `import { ThinkingCube } from 'thinking-cube';
 
 <ThinkingCube state="searching" size={64} />
@@ -185,6 +186,51 @@ function cap(s: string) {
   return s[0].toUpperCase() + s.slice(1);
 }
 
+/** Logo geometry (public/images/logo.svg) without the tile: [x, y, r, opacity]. */
+const MARK_DOTS: Array<[number, number, number, number]> = [
+  [256, 98, 16.875, 1], [210.4, 124.3, 14.175, 1], [164.8, 150.7, 14.175, 1], [119.2, 177, 16.875, 1],
+  [301.6, 124.3, 14.175, 1], [256, 150.7, 14.175, 1], [210.4, 177, 14.175, 1], [164.8, 203.3, 14.175, 1],
+  [347.2, 150.7, 14.175, 1], [301.6, 177, 14.175, 1], [256, 203.3, 14.175, 1], [210.4, 229.7, 14.175, 1],
+  [392.8, 177, 16.875, 1], [347.2, 203.3, 14.175, 1], [301.6, 229.7, 14.175, 1], [119.2, 229.7, 14.175, .56],
+  [119.2, 282.3, 14.175, .56], [119.2, 335, 16.875, .56], [164.8, 256, 14.175, .56], [164.8, 308.7, 14.175, .56],
+  [164.8, 361.3, 14.175, .56], [210.4, 282.3, 14.175, .56], [210.4, 335, 14.175, .56], [210.4, 387.7, 14.175, .56],
+  [256, 308.7, 14.175, .56], [256, 361.3, 14.175, .56], [256, 414, 16.875, .56], [301.6, 282.3, 14.175, .26],
+  [301.6, 335, 14.175, .26], [301.6, 387.7, 14.175, .26], [347.2, 256, 14.175, .26], [347.2, 308.7, 14.175, .26],
+  [347.2, 361.3, 14.175, .26], [392.8, 229.7, 14.175, .26], [392.8, 282.3, 14.175, .26], [392.8, 335, 16.875, .26],
+];
+
+/** The logo drawn in currentColor, so it takes the page's ink in both themes. */
+function BrandMark({ size = 24 }: { size?: number }) {
+  return (
+    <svg
+      className="brand-mark"
+      width={size}
+      height={size}
+      viewBox="84 84 344 344"
+      aria-hidden="true"
+    >
+      <mask id="tc-core">
+        <rect x="0" y="0" width="512" height="512" fill="#fff" />
+        <circle cx="256" cy="256" r="38" fill="#000" />
+      </mask>
+      <g fill="currentColor" mask="url(#tc-core)">
+        <path
+          d="M256 98 392.83 177v158L256 414 119.17 335V177ZM256 256l136.83-79M256 256 119.17 177M256 256v158"
+          fill="none"
+          stroke="currentColor"
+          strokeOpacity={0.22}
+          strokeWidth={5}
+          strokeLinejoin="round"
+        />
+        {MARK_DOTS.map(([x, y, r, o], i) => (
+          <circle key={i} cx={x} cy={y} r={r} fillOpacity={o} />
+        ))}
+      </g>
+      <circle cx="256" cy="256" r="20" fill="currentColor" />
+    </svg>
+  );
+}
+
 export default function App() {
   const [dark, setDark] = useState(true);
   const [tab, setTab] = useState<'preview' | 'install'>('preview');
@@ -204,24 +250,63 @@ export default function App() {
 
   return (
     <main className="page">
-      <header className="hero">
-        <div>
-          <div className="icon-chip" aria-hidden="true">
-            <ThinkingCube state="breathing" size={20} />
-          </div>
-          <h1>Thinking cube</h1>
-          <p className="lede">
-            Wireframe-cube loading indicators for AI interfaces, with nine hand-tuned animated
-            states. Zero dependencies, one canvas.
-          </p>
+      <nav className="topbar" aria-label="Site">
+        <a className="brand" href="#top" aria-label="Thinking Cube, back to top">
+          <BrandMark size={26} />
+          <span className="brand-name">thinking-cube</span>
+        </a>
+        <div className="topnav">
+          <a href="https://github.com/sanskar0627/thinking-cube" target="_blank" rel="noreferrer">
+            GitHub<span className="topnav-arrow" aria-hidden="true">↗</span>
+          </a>
+          <a href="#playground">Playground</a>
+          <a href="#docs" onClick={() => setTab('install')}>
+            <span className="nav-long">Install &amp; Usage</span>
+            <span className="nav-short">Docs</span>
+          </a>
+          <button
+            className="theme-icon"
+            type="button"
+            onClick={() => setDark((d) => !d)}
+            aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {dark ? (
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M13.2 9.6A5.5 5.5 0 0 1 6.4 2.8a5.5 5.5 0 1 0 6.8 6.8Z" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 16 16" aria-hidden="true">
+                <circle cx="8" cy="8" r="3" />
+                <path d="M8 1.5v1.2M8 13.3v1.2M1.5 8h1.2M13.3 8h1.2M3.4 3.4l.85.85M11.75 11.75l.85.85M3.4 12.6l.85-.85M11.75 4.25l.85-.85" />
+              </svg>
+            )}
+          </button>
         </div>
-        <button className="theme-btn" type="button" onClick={() => setDark((d) => !d)}>
-          <span aria-hidden="true">{dark ? '☾' : '☀'}</span>
-          {dark ? 'Dark' : 'Light'}
-        </button>
+      </nav>
+
+      <header className="hero" id="top">
+        <div className="hero-copy">
+          <h1 className="display">Thinking Cube</h1>
+          <p className="hero-tag">Loaders that show their work.</p>
+          <p className="hero-lede">
+            Nine hand-tuned states for searching, solving, planning and listening. One React
+            component, one canvas, zero dependencies.
+          </p>
+          <div className="hero-cta">
+            <div className="install-pill">
+              <code>
+                <span className="tok-prompt">$ </span>
+                {INSTALL_SHORT}
+              </code>
+              <CopyButton text={INSTALL_SHORT} />
+            </div>
+            <span className="hero-meta">~7 kB · MIT · React 18+</span>
+          </div>
+        </div>
+
       </header>
 
-      <div className="tabs" role="tablist" aria-label="Sections">
+      <div className="tabs" id="docs" role="tablist" aria-label="Sections">
         <button
           className="tab"
           role="tab"
@@ -298,7 +383,7 @@ export default function App() {
           <section className="doc-section" aria-labelledby="doc-props">
             <header className="doc-head">
               <h2 id="doc-props" className="doc-title">Props</h2>
-              <p className="doc-sub">Same API as thinking-orbs, so it swaps in with no other changes.</p>
+              <p className="doc-sub">Every prop is optional, fully typed, with sensible defaults.</p>
             </header>
             <div className="api-wrap">
               <table className="api">
@@ -331,7 +416,7 @@ export default function App() {
         </>
       )}
 
-      <section className="section" aria-label="Playground">
+      <section className="section" id="playground" aria-label="Playground">
         <h2 className="section-title">Playground</h2>
         <div className="playground">
           <div className="stage">
@@ -396,12 +481,71 @@ export default function App() {
         </div>
       </section>
 
-      <footer>
-        Inspired by{' '}
-        <a href="https://libraries.dev/orbs" target="_blank" rel="noreferrer">
-          thinking-orbs
-        </a>{' '}
-        · same API, a cube instead of a sphere.
+      <footer className="footer">
+        <div className="footer-main">
+          <div className="footer-cta">
+            <h2>Ready when your agent is.</h2>
+            <p>One import, nine states, zero dependencies.</p>
+            <div className="install-pill">
+              <code>
+                <span className="tok-prompt">$ </span>
+                {INSTALL_SHORT}
+              </code>
+              <CopyButton text={INSTALL_SHORT} />
+            </div>
+          </div>
+
+          <nav className="footer-cols" aria-label="Footer">
+            <div className="footer-col">
+              <h3>Project</h3>
+              <a href="#playground">Playground</a>
+              <a href="#docs" onClick={() => setTab('install')}>
+                Install &amp; Usage
+              </a>
+              <a href="https://github.com/sanskar0627/thinking-cube" target="_blank" rel="noreferrer">
+                Source<span aria-hidden="true">↗</span>
+              </a>
+              <a href="https://www.npmjs.com/package/thinking-cube" target="_blank" rel="noreferrer">
+                npm<span aria-hidden="true">↗</span>
+              </a>
+            </div>
+            <div className="footer-col">
+              <h3>Author</h3>
+              <a href="https://sanskarshukla.com" target="_blank" rel="noreferrer">
+                Portfolio<span aria-hidden="true">↗</span>
+              </a>
+              <a href="https://x.com/sanskar0627" target="_blank" rel="noreferrer">
+                X<span aria-hidden="true">↗</span>
+              </a>
+              <a href="https://github.com/sanskar0627" target="_blank" rel="noreferrer">
+                GitHub<span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </nav>
+        </div>
+
+        <div className="footer-meta">
+          <span>
+            © 2026{' '}
+            <a href="https://sanskarshukla.com" target="_blank" rel="noreferrer">
+              Sanskar Shukla
+            </a>{' '}
+            · MIT License
+          </span>
+          <span>
+            Inspired by{' '}
+            <a href="https://libraries.dev/orbs" target="_blank" rel="noreferrer">
+              thinking-orbs
+            </a>
+          </span>
+          <a className="footer-top-link" href="#top">
+            Back to top <span aria-hidden="true">↑</span>
+          </a>
+        </div>
+
+        <p className="footer-wordmark" aria-hidden="true">
+          Thinking Cube
+        </p>
       </footer>
     </main>
   );
