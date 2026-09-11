@@ -1,6 +1,6 @@
 {
   "name": "thinking-cube",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Wireframe-cube loading indicators for AI interfaces. Nine hand-tuned states, one canvas, zero dependencies.",
   "keywords": [
     "react",
