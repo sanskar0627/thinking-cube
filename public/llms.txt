@@ -1,0 +1,26 @@
+# Thinking Cube
+
+> Thinking Cube is an open-source React component (npm package `thinking-cube`) that renders animated wireframe-cube loading indicators for AI interfaces. Nine hand-tuned states show what an AI agent is doing (searching, solving, planning, listening, writing and more) instead of a generic spinner. One 2D canvas, zero runtime dependencies, about 7 kB gzipped, MIT licensed. Made by Sanskar Shukla, inspired by thinking-orbs.
+
+Install with `npm i thinking-cube`, then render `<ThinkingCube state="searching" size={64} />`. It works with React 18 and 19, Next.js (ships with "use client"), Vite and Remix. TypeScript types are included.
+
+States: `working`, `searching`, `solving`, `listening`, `connecting`, `weaving` (planning), `composing` (writing), `breathing` (thinking), `shaping`.
+
+Props: `state`, `size` (CSS px, tuned for 64 and 20), `speed`, `dark`, `theme` ('auto' | 'dark' | 'light'), `paused`.
+
+## Docs
+
+- [Full documentation for LLMs](https://cube.sanskarshukla.com/llms-full.txt): states, props, recipes, accessibility, in one plain-text file
+- [Live demo and playground](https://cube.sanskarshukla.com/): every state running, with a props playground
+- [README on GitHub](https://github.com/sanskar0627/thinking-cube#readme): quick start, states table, API
+- [npm package](https://www.npmjs.com/package/thinking-cube): install and version info
+
+## Source
+
+- [ThinkingCube.tsx](https://github.com/sanskar0627/thinking-cube/blob/main/ThinkingCube.tsx): the whole component in a single file, can be copied into a project directly
+- [License (MIT)](https://github.com/sanskar0627/thinking-cube/blob/main/LICENSE)
+
+## Optional
+
+- [thinking-orbs](https://libraries.dev/orbs): the sphere-based library that inspired Thinking Cube and shares its API
+- [Sanskar Shukla](https://sanskarshukla.com): author

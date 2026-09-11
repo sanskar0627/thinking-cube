@@ -57,6 +57,7 @@
   --tok-prompt: rgba(232, 232, 234, 0.35);
   --wm-dim: rgba(255, 255, 255, 0.07);
   --wm-lit: rgba(255, 255, 255, 0.34);
+  --hero-dot: rgba(255, 255, 255, 0.11);
 }
 
 html[data-theme='light'] {
@@ -116,6 +117,7 @@ html[data-theme='light'] {
   --tok-prompt: rgba(29, 29, 31, 0.35);
   --wm-dim: rgba(0, 0, 0, 0.06);
   --wm-lit: rgba(0, 0, 0, 0.3);
+  --hero-dot: rgba(0, 0, 0, 0.11);
 }
 
 * {
@@ -161,6 +163,7 @@ button {
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 .topbar {
@@ -250,7 +253,53 @@ html {
 /* ---------- hero ---------- */
 
 .hero {
+  position: relative;
+  isolation: isolate;
   padding: 104px 0 88px;
+}
+
+/* Dot fields on both sides of the hero, like the share card: invisible
+   behind the text, rising to full strength toward the screen edges, and
+   fading out top and bottom so they never touch the header or the preview.
+   Both layers tile from the content's left edge, so they share one grid. */
+.hero::before,
+.hero::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  background-image: radial-gradient(circle, var(--hero-dot) 1.1px, transparent 1.6px);
+  background-size: 22px 22px;
+  pointer-events: none;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+/* right: from past the headline out to the screen edge */
+.hero::before {
+  left: 0;
+  right: calc((100% - 100vw) / 2);
+  background-position: left top;
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0, transparent 640px, #000 1080px),
+    linear-gradient(180deg, transparent 0%, #000 32%, #000 62%, transparent 100%);
+  mask-image:
+    linear-gradient(90deg, transparent 0, transparent 640px, #000 1080px),
+    linear-gradient(180deg, transparent 0%, #000 32%, #000 62%, transparent 100%);
+}
+
+/* left: the margin before the text, fading out as it reaches the letters */
+.hero::after {
+  right: 100%;
+  left: calc((100% - 100vw) / 2);
+  background-position: right top;
+  -webkit-mask-image:
+    linear-gradient(90deg, #000 0%, #000 35%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 32%, #000 62%, transparent 100%);
+  mask-image:
+    linear-gradient(90deg, #000 0%, #000 35%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 32%, #000 62%, transparent 100%);
 }
 
 /* dot-matrix type, round dots: the same material the cubes are drawn with */
@@ -277,7 +326,8 @@ html {
 
 .hero-lede {
   margin: 12px 0 0;
-  max-width: 560px;
+  max-width: 620px;
+  text-wrap: pretty;
   font-size: 17px;
   line-height: 27px;
   color: var(--text-muted);
@@ -851,7 +901,7 @@ html:not([data-theme='light']) .code-window {
 /* ---------- footer ---------- */
 
 .footer {
-  margin-top: 120px;
+  margin-top: 104px;
   padding: 56px 0 16px;
   border-top: 1px solid var(--hairline);
   overflow: hidden;
@@ -994,6 +1044,10 @@ html:not([data-theme='light']) .code-window {
 @media (max-width: 860px) {
   .hero {
     padding: 64px 0 56px;
+  }
+  .hero::before,
+  .hero::after {
+    display: none;
   }
   .footer-main {
     grid-template-columns: 1fr;

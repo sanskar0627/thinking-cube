@@ -289,8 +289,8 @@ export default function App() {
           <h1 className="display">Thinking Cube</h1>
           <p className="hero-tag">Loaders that show their work.</p>
           <p className="hero-lede">
-            Nine hand-tuned states for searching, solving, planning and listening. One React
-            component, one canvas, zero dependencies.
+            Nine hand-tuned loading animations for AI agents: searching, solving, planning and
+            listening. One React component, one canvas, zero dependencies.
           </p>
           <div className="hero-cta">
             <div className="install-pill">

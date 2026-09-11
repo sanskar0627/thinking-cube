@@ -1,0 +1,14 @@
+{
+  "name": "Thinking Cube",
+  "short_name": "Thinking Cube",
+  "description": "Animated wireframe-cube loaders for AI interfaces. One React component, zero dependencies.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#121212",
+  "theme_color": "#121212",
+  "icons": [
+    { "src": "/images/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/images/logo.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/images/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
