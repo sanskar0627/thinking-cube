@@ -5,14 +5,23 @@
 **Wireframe-cube loading indicators for AI interfaces.**<br>
 Nine hand-tuned states. One canvas. Zero dependencies.
 
-[Live demo](https://thinking-cube.sanskarshukla.com) · [Install](#install) · [States](#states) · [API](#api)
+[![npm version](https://img.shields.io/npm/v/thinking-cube?style=flat&colorA=18181b&colorB=18181b&label=npm)](https://www.npmjs.com/package/thinking-cube)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/thinking-cube?style=flat&colorA=18181b&colorB=18181b&label=min%2Bgzip)](https://bundlephobia.com/package/thinking-cube)
+[![dependencies](https://img.shields.io/badge/dependencies-0-18181b?style=flat&colorA=18181b)](https://www.npmjs.com/package/thinking-cube?activeTab=dependencies)
+[![license](https://img.shields.io/npm/l/thinking-cube?style=flat&colorA=18181b&colorB=18181b)](https://github.com/sanskar0627/thinking-cube/blob/main/LICENSE)
+
+**[Live demo](https://thinking-cube.sanskarshukla.com)** · [npm](https://www.npmjs.com/package/thinking-cube) · [GitHub](https://github.com/sanskar0627/thinking-cube) · [States](#states) · [API](#api)
 
 <br>
 
+<a href="https://thinking-cube.sanskarshukla.com">
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sanskar0627/thinking-cube/main/media/preview-dark.png">
   <img alt="The nine Thinking Cube states: solving, thinking, listening, working, searching, connecting, planning, breathing and shaping" src="https://raw.githubusercontent.com/sanskar0627/thinking-cube/main/media/preview-light.png" width="100%">
 </picture>
+</a>
+
+<sub>Every state is live and tweakable in the <a href="https://thinking-cube.sanskarshukla.com">playground</a>.</sub>
 
 </div>
 
@@ -20,26 +29,20 @@ Nine hand-tuned states. One canvas. Zero dependencies.
 
 ## Why
 
-AI products spend a lot of time waiting. A spinner says "loading". Thinking Cube says *what kind* of thinking is happening: searching, planning, solving, listening. Each state has its own motion, so the indicator carries meaning, not just time.
+AI products spend a lot of time waiting. A spinner only says "loading". Thinking Cube shows *what kind* of thinking is happening: searching, planning, solving, listening. Each state has its own motion, so the indicator carries meaning, not just time.
 
-It is the cube companion to [thinking-orbs](https://libraries.dev/orbs). Same props, same monochrome dotted language, a different shape. If you use orbs today, swapping in a cube is a one-line change.
+It is the cube companion to [thinking-orbs](https://libraries.dev/orbs). Same props, same monochrome dotted language, a different shape. If you already use orbs, switching to a cube is a one-line change.
 
-- **Zero runtime dependencies.** No Three.js, no WebGL. Plain 2D canvas with a small projection engine.
+- **Zero runtime dependencies.** No Three.js, no WebGL. A plain 2D canvas and a small projection engine, about 7 kB gzipped.
 - **Built for two sizes.** Tuned by hand at `64` (avatar) and `20` (inline next to text). Anything in between interpolates.
-- **Looks right everywhere.** Crisp on Retina, follows your light or dark theme automatically.
-- **Polite by default.** Pauses when off-screen or in a background tab, and respects reduced motion.
+- **Looks right everywhere.** Crisp on Retina screens and follows your light or dark theme automatically.
+- **Polite by default.** Pauses off-screen and in background tabs, and respects reduced motion.
 
-## Install
+## Quick start
 
 ```bash
 npm install thinking-cube
 ```
-
-Works with React 18 and 19, in Vite, Next.js (App Router included) and any other React setup. Types ship with the package.
-
-Prefer no dependency at all? Thinking Cube is a single file, so you can also copy [`ThinkingCube.tsx`](./ThinkingCube.tsx) straight into your project.
-
-## Usage
 
 ```tsx
 import { ThinkingCube } from 'thinking-cube';
@@ -54,21 +57,51 @@ export function AgentStatus() {
 }
 ```
 
-Use `size={64}` for an avatar or hero spot, `size={20}` inline beside a status label.
+That's it. No provider, no CSS import, no config.
+
+**Works with** React 18 and 19, Vite, Next.js, Remix and any other React setup. TypeScript types are included.
+
+**Next.js App Router:** the package ships with `"use client"` built in, so you can import it straight into a Server Component.
+
+**Prefer no dependency at all?** Thinking Cube is a single file. Copy [`ThinkingCube.tsx`](https://github.com/sanskar0627/thinking-cube/blob/main/ThinkingCube.tsx) into your project and import it locally.
 
 ## States
 
-| State | What it shows |
-| --- | --- |
-| `working` | A fast turn while particles race along every edge. |
-| `searching` | A scan plane sweeps left and right through a cube built from dots. |
-| `solving` | Slabs twist in quarter turns like a Rubik's cube, scramble, then click back to solved. |
-| `listening` | A slow, two-tempo wave rolls through the dot cube, waiting for input. |
-| `connecting` | Light travels along all twelve edges in both directions. |
-| `weaving` | A route planner. A path picks its way node to node toward the far corner, weighing the options it passes, then commits. |
-| `composing` | Bands of dots undulate around the faces like lines on a score. |
-| `breathing` | The cube expands and contracts on a calm sine wave. |
-| `shaping` | Edges draw in one by one, the faces fill, then everything dissolves and starts again. |
+| State | What it shows | Good for |
+| --- | --- | --- |
+| `working` | A fast turn while particles race along every edge. | General background work |
+| `searching` | A scan plane sweeps left and right through a cube built from dots. | Search, retrieval, browsing |
+| `solving` | Slabs twist in quarter turns like a Rubik's cube, scramble, then click back to solved. | Reasoning, math, code |
+| `listening` | A slow, two-tempo wave rolls through the dot cube, waiting for input. | Voice input, idle agent |
+| `connecting` | Light travels along all twelve edges in both directions. | Network calls, tools, APIs |
+| `weaving` | A route planner. A path picks its way node to node toward the far corner, then commits. | Planning, multi-step tasks |
+| `composing` | Bands of dots undulate around the faces like lines on a score. | Writing, generating text |
+| `breathing` | The cube expands and contracts on a calm sine wave. | Thinking, waiting |
+| `shaping` | Edges draw in one by one, the faces fill, then everything dissolves and starts again. | Building, designing, rendering |
+
+## Recipes
+
+**Inline, next to a status line**
+
+```tsx
+<ThinkingCube state="weaving" size={20} />
+```
+
+**As an agent avatar**
+
+```tsx
+<ThinkingCube state="composing" size={64} />
+```
+
+**Follow your agent's real status**
+
+```tsx
+const state = isSearching ? 'searching' : isPlanning ? 'weaving' : 'breathing';
+
+<ThinkingCube state={state} size={20} paused={isDone} />
+```
+
+Switching `state` keeps the animation clock running, and `paused` freezes the current frame, so a finished task can simply stop in place.
 
 ## API
 
@@ -83,7 +116,7 @@ Use `size={64}` for an avatar or hero spot, `size={20}` inline beside a status l
 
 Any other canvas attributes (`className`, `style`, `aria-label`…) pass straight through.
 
-The file also exports `CUBE_STATES` (the list of states), the `CubeState`, `CubeTheme` and `ThinkingCubeProps` types, and `renderCubeFrame(ctx, state, size, t, dark)` if you want to draw a frame yourself.
+Also exported: `CUBE_STATES` (the list of states), the `CubeState`, `CubeTheme` and `ThinkingCubeProps` types, and `renderCubeFrame(ctx, state, size, t, dark)` if you want to draw a frame yourself.
 
 ## Accessibility and performance
 
@@ -94,7 +127,7 @@ The file also exports `CUBE_STATES` (the list of states), the `CubeState`, `Cube
 
 ## How it works
 
-The cube is drawn on a 2D canvas with a small hand-written projection. The camera sits at a fixed three-quarter view and only turns around the vertical axis, so the cube always reads as a cube: vertical edges stay vertical and opposite edges stay close to parallel. Back edges are faded by face visibility, dots are depth-sorted, and size and brightness carry the sense of depth.
+The cube is drawn on a 2D canvas with a small hand-written projection. The camera sits at a fixed three-quarter view and only turns around the vertical axis, so the cube always reads as a cube: vertical edges stay vertical and opposite edges stay close to parallel. Back edges fade by face visibility, dots are depth-sorted, and size and brightness carry the sense of depth.
 
 ## Run the demo locally
 
@@ -110,10 +143,12 @@ npm run dev
 | `ThinkingCube.tsx` | The component and its animation engine. The only file you need. |
 | `src/` | The demo site: preview grid, install docs and playground. |
 
+Issues and ideas are welcome on [GitHub](https://github.com/sanskar0627/thinking-cube/issues).
+
 ## Credits
 
 Inspired by [thinking-orbs](https://libraries.dev/orbs) by [Jakub Antalik](https://libraries.dev). Thinking Cube keeps its API and visual language, and the Rubik solve cycle and lattice motion are adapted from its MIT-licensed engine.
 
 ## License
 
-[MIT](./LICENSE) © Sanskar Shukla
+[MIT](https://github.com/sanskar0627/thinking-cube/blob/main/LICENSE) © [Sanskar Shukla](https://sanskarshukla.com)
