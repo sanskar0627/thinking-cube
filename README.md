@@ -5,13 +5,13 @@
 **Wireframe-cube loading indicators for AI interfaces.**<br>
 Nine hand-tuned states. One canvas. Zero dependencies.
 
-[Live demo](https://design.sanskarshukla.com/thinking-cube) · [Install](#install) · [States](#states) · [API](#api)
+[Live demo](https://thinking-cube.sanskarshukla.com) · [Install](#install) · [States](#states) · [API](#api)
 
 <br>
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="media/preview-dark.png">
-  <img alt="The nine Thinking Cube states: solving, thinking, listening, working, searching, connecting, planning, breathing and shaping" src="media/preview-light.png" width="100%">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sanskar0627/thinking-cube/main/media/preview-dark.png">
+  <img alt="The nine Thinking Cube states: solving, thinking, listening, working, searching, connecting, planning, breathing and shaping" src="https://raw.githubusercontent.com/sanskar0627/thinking-cube/main/media/preview-light.png" width="100%">
 </picture>
 
 </div>
@@ -31,14 +31,18 @@ It is the cube companion to [thinking-orbs](https://libraries.dev/orbs). Same pr
 
 ## Install
 
-Thinking Cube is a single file. Copy [`ThinkingCube.tsx`](./ThinkingCube.tsx) into your project. The only requirement is React 18 or newer.
+```bash
+npm install thinking-cube
+```
 
-> An npm package (`thinking-cube`) is on the way.
+Works with React 18 and 19, in Vite, Next.js (App Router included) and any other React setup. Types ship with the package.
+
+Prefer no dependency at all? Thinking Cube is a single file, so you can also copy [`ThinkingCube.tsx`](./ThinkingCube.tsx) straight into your project.
 
 ## Usage
 
 ```tsx
-import { ThinkingCube } from './ThinkingCube';
+import { ThinkingCube } from 'thinking-cube';
 
 export function AgentStatus() {
   return (
