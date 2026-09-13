@@ -1,21 +1,61 @@
 {
   "name": "thinking-cube",
-  "private": true,
-  "version": "1.0.0",
+  "version": "0.1.0",
+  "description": "Wireframe-cube loading indicators for AI interfaces. Nine hand-tuned states, one canvas, zero dependencies.",
+  "keywords": [
+    "react",
+    "loader",
+    "loading-indicator",
+    "spinner",
+    "canvas",
+    "animation",
+    "ai",
+    "thinking",
+    "cube",
+    "thinking-orbs"
+  ],
+  "homepage": "https://thinking-cube.sanskarshukla.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sanskar0627/thinking-cube.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sanskar0627/thinking-cube/issues"
+  },
+  "author": "Sanskar Shukla (https://sanskarshukla.com)",
+  "license": "MIT",
   "type": "module",
+  "main": "./lib/thinking-cube.cjs",
+  "module": "./lib/thinking-cube.js",
+  "types": "./lib/ThinkingCube.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/ThinkingCube.d.ts",
+      "import": "./lib/thinking-cube.js",
+      "require": "./lib/thinking-cube.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib"
+  ],
+  "sideEffects": false,
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:lib": "vite build --config vite.lib.config.ts && tsc -p tsconfig.lib.json",
+    "prepublishOnly": "npm run build:lib"
   },
-  "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+  "peerDependencies": {
+    "react": ">=18"
   },
   "devDependencies": {
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "typescript": "^5.6.3",
     "vite": "^5.4.11"
   }
