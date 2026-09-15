@@ -10,18 +10,18 @@ Nine hand-tuned states. One canvas. Zero dependencies.
 [![dependencies](https://img.shields.io/badge/dependencies-0-18181b?style=flat&colorA=18181b)](https://www.npmjs.com/package/thinking-cube?activeTab=dependencies)
 [![license](https://img.shields.io/npm/l/thinking-cube?style=flat&colorA=18181b&colorB=18181b)](https://github.com/sanskar0627/thinking-cube/blob/main/LICENSE)
 
-**[Live demo](https://thinking-cube.sanskarshukla.com)** · [npm](https://www.npmjs.com/package/thinking-cube) · [GitHub](https://github.com/sanskar0627/thinking-cube) · [States](#states) · [API](#api)
+**[Live demo](https://cube.sanskarshukla.com)** · [npm](https://www.npmjs.com/package/thinking-cube) · [GitHub](https://github.com/sanskar0627/thinking-cube) · [States](#states) · [API](#api)
 
 <br>
 
-<a href="https://thinking-cube.sanskarshukla.com">
+<a href="https://cube.sanskarshukla.com">
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/sanskar0627/thinking-cube/main/media/preview-dark.png">
   <img alt="The nine Thinking Cube states: solving, thinking, listening, working, searching, connecting, planning, breathing and shaping" src="https://raw.githubusercontent.com/sanskar0627/thinking-cube/main/media/preview-light.png" width="100%">
 </picture>
 </a>
 
-<sub>Every state is live and tweakable in the <a href="https://thinking-cube.sanskarshukla.com">playground</a>.</sub>
+<sub>Every state is live and tweakable in the <a href="https://cube.sanskarshukla.com">playground</a>.</sub>
 
 </div>
 
